@@ -21,9 +21,8 @@ def create_app():
     app = Flask(__name__)
     app.register_blueprint(routes, url_prefix='')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
-
-    app.before_first_request(lambda: db.create_all())
 
     return app
 
