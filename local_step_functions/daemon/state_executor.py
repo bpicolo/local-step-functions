@@ -3,6 +3,7 @@ import time
 
 from local_step_functions.app import create_app
 from local_step_functions.logic.runner import run_state_machine
+from local_step_functions.logic.state_machines import get_next_machine_to_run
 from local_step_functions.models.db import db
 from local_step_functions.models.state_machine import StateMachine
 from local_step_functions.models.state_machine_execution import ExecutionStatus
@@ -17,10 +18,8 @@ def run_state_executor():
             time.sleep(2)
             continue
 
-        output = run_state_machine(*to_run)
-
-        print("Output: ")
-        print(output)
+        machine, execution = to_run
+        output = run_state_machine(machine, execution, None)
 
 
 if __name__ == '__main__':

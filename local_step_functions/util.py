@@ -6,6 +6,11 @@ from jsonpath_ng import parse
 
 from local_step_functions.exceptions import StateException
 
+
+def now_timestamp():
+    return int(datetime.now().timestamp())
+
+
 def required_single_path_match(data, path):
     matcher = parse(path)
     match = list(matcher.find(data))

@@ -1,0 +1,7 @@
+from .activities import ACTIVITY_ROUTES
+from .state_machine import STATE_MACHINE_ROUTES
+
+
+ROUTE_RULES = {}
+ROUTE_RULES.update(STATE_MACHINE_ROUTES)
+ROUTE_RULES.update(ACTIVITY_ROUTES)
