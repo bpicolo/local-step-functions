@@ -1,5 +1,8 @@
+virtualenv_run
 venv
 .cache
 .vscode
 *.py[co]
 __pycache__
+*.egg-info
+*.egg

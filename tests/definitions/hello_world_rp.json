@@ -6,6 +6,12 @@
       "Type": "Pass",
       "Result": "World",
       "ResultPath": "$.hello",
+      "Next": "SecondHelloWorld"
+    },
+    "SecondHelloWorld": {
+      "Type": "Pass",
+      "Result": "World2",
+      "ResultPath": "$.hello2",
       "End": true
     }
   }

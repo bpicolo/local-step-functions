@@ -1,10 +1,11 @@
 import json
-
 from datetime import datetime
+from uuid import uuid4
+
 from flask import request
 
-from uuid import uuid4
 from local_step_functions.models.db import db
+from local_step_functions.models.state_machine_execution import ExecutionStatus
 from local_step_functions.models.state_machine import StateMachine
 from local_step_functions.models.state_machine_execution import StateMachineExecution
 
@@ -24,9 +25,11 @@ def serialize_state_machine(state_machine):
         'stateMachineArn': state_machine_arn(state_machine.name, state_machine.uuid)
     }
 
+
 def load_state_machine(arn):
     uuid = arn.split(':')[-1]
     return StateMachine.query.filter_by(uuid=uuid).first()
+
 
 def list_state_machines():
     data = json.loads(request.data)
@@ -58,15 +61,16 @@ def list_state_machines():
 
     return out
 
+
 def create_state_machine():
     data = json.loads(request.data)
 
     state_machine = StateMachine(
         name=data['name'],
-        definition=json.dumps(data['definition']),
+        definition=data['definition'],
         roleArn=data['roleArn'],
         uuid=str(uuid4()),
-        creationDate=int(datetime.now().timestamp())
+        creationDate=int(datetime.now().timestamp()),
     )
     db.session.add(state_machine)
     db.session.commit()
@@ -83,8 +87,9 @@ def start_execution():
     execution = StateMachineExecution(
         state_machine_uuid=machine.uuid,
         name=data.get('name', str(uuid4())),
-        data=json.dumps(data['input']),
-        startDate=int(datetime.now().timestamp())
+        data=data['input'],
+        startDate=int(datetime.now().timestamp()),
+        status=ExecutionStatus.running,
     )
 
     db.session.add(execution)
@@ -94,6 +99,7 @@ def start_execution():
         'executionArn': execution_arn(machine.name, execution.name),
         'startDate': execution.startDate
     }
+
 
 ROUTE_RULES = {
     'CreateStateMachine': create_state_machine,
